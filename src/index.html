@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f1f4f5" />
-    <title>计算器</title>
+    <title>Calculator</title>
     <script>
       (() => {
         let preference = null;
@@ -26,21 +26,21 @@
   <body>
     <div class="app-shell">
       <header class="site-header">
-        <h1>计算器</h1>
+        <h1>Calculator</h1>
         <div class="header-actions">
-          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换到深色模式">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme">
             <span class="theme-icon" id="theme-icon" aria-hidden="true">☾</span>
-            <span id="theme-label">深色模式</span>
+            <span id="theme-label">Dark theme</span>
           </button>
           <details class="settings" id="settings">
-            <summary aria-label="打开接口设置">
+            <summary aria-label="Open API settings">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.6 2h2.8l.5 2.3c.5.2 1 .4 1.4.8l2.1-1.1 2 2-1.1 2.1c.3.4.6.9.8 1.4l2.3.5v2.8l-2.3.5c-.2.5-.5 1-.8 1.4l1.1 2.1-2 2-2.1-1.1c-.4.3-.9.6-1.4.8l-.5 2.3h-2.8l-.5-2.3c-.5-.2-1-.5-1.4-.8l-2.1 1.1-2-2 1.1-2.1c-.3-.4-.6-.9-.8-1.4L2 13.4v-2.8l2.3-.5c.2-.5.5-1 .8-1.4L4 6.6l2-2 2.1 1.1c.4-.3.9-.6 1.4-.8L10.6 2Z"/><circle cx="12" cy="12" r="3"/></svg>
-              <span>接口设置</span>
+              <span>API settings</span>
             </summary>
-            <form id="settings-form" class="settings-panel">
-              <label for="api-url">后端 API 地址</label>
-              <input id="api-url" name="api-url" type="url" inputmode="url" autocomplete="url" spellcheck="false" aria-label="后端 API 地址" required />
-              <button type="submit" aria-label="保存后端地址并重新连接">保存并重新连接</button>
+            <form id="settings-form" class="settings-panel" novalidate>
+              <label for="api-url">Backend API URL</label>
+              <input id="api-url" name="api-url" type="url" inputmode="url" autocomplete="url" spellcheck="false" aria-label="Backend API URL" required />
+              <button type="submit" aria-label="Save backend URL and reconnect">Save and reconnect</button>
               <span class="settings-error" id="settings-error" role="alert"></span>
             </form>
           </details>
@@ -51,21 +51,21 @@
         <div class="intro">
           <div class="connection-status" id="connection-status" data-state="connecting" role="status" aria-live="polite">
             <span class="status-dot" aria-hidden="true"></span>
-            <span id="connection-label">正在连接后端</span>
+            <span id="connection-label">Connecting to backend</span>
           </div>
         </div>
 
         <div class="workspace">
           <section class="calculator-card" aria-labelledby="calculator-heading">
             <div class="card-heading">
-              <h2 id="calculator-heading">计算</h2>
+              <h2 id="calculator-heading">Calculate</h2>
             </div>
 
             <form id="calculator-form" novalidate>
               <div class="display">
                 <div class="display-topline">
-                  <label for="expression">表达式</label>
-                  <button class="backspace-button" id="backspace-button" type="button" aria-label="删除光标前的字符" title="退格">
+                  <label for="expression">Expression</label>
+                  <button class="backspace-button" id="backspace-button" type="button" aria-label="Delete character before cursor" title="Backspace">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9a2 2 0 0 1-1.5-.7L2 12l5.5-7.3A2 2 0 0 1 9 4Z"/><path d="m12 9 6 6m0-6-6 6"/></svg>
                   </button>
                 </div>
@@ -80,65 +80,65 @@
 
               <details class="scientific-tools" id="scientific-tools">
                 <summary>
-                  <span>科学计算</span>
-                  <span class="scientific-mode">三角函数：RAD 弧度</span>
+                  <span>Scientific</span>
+                  <span class="scientific-mode" title="Trigonometric functions use radians">RAD (radians)</span>
                 </summary>
-                <div class="scientific-keypad" id="scientific-keypad" aria-label="科学计算按键">
-                  <button type="button" class="scientific-key" data-function="sin" aria-label="正弦 sin，弧度">sin</button>
-                  <button type="button" class="scientific-key" data-function="cos" aria-label="余弦 cos，弧度">cos</button>
-                  <button type="button" class="scientific-key" data-function="tan" aria-label="正切 tan，弧度">tan</button>
-                  <button type="button" class="scientific-key" data-insert="^" aria-label="幂运算">xʸ</button>
+                <div class="scientific-keypad" id="scientific-keypad" aria-label="Scientific keys">
+                  <button type="button" class="scientific-key" data-function="sin" aria-label="Sine, radians">sin</button>
+                  <button type="button" class="scientific-key" data-function="cos" aria-label="Cosine, radians">cos</button>
+                  <button type="button" class="scientific-key" data-function="tan" aria-label="Tangent, radians">tan</button>
+                  <button type="button" class="scientific-key" data-insert="^" aria-label="Exponentiation">xʸ</button>
 
-                  <button type="button" class="scientific-key" data-function="sqrt" aria-label="平方根 sqrt">√x</button>
-                  <button type="button" class="scientific-key" data-function="ln" aria-label="自然对数 ln">ln</button>
-                  <button type="button" class="scientific-key" data-function="log" aria-label="常用对数 log，以 10 为底">log₁₀</button>
-                  <button type="button" class="scientific-key" data-function="abs" aria-label="绝对值 abs">|x|</button>
+                  <button type="button" class="scientific-key" data-function="sqrt" aria-label="Square root">√x</button>
+                  <button type="button" class="scientific-key" data-function="ln" aria-label="Natural logarithm">ln</button>
+                  <button type="button" class="scientific-key" data-function="log" aria-label="Base-10 logarithm">log₁₀</button>
+                  <button type="button" class="scientific-key" data-function="abs" aria-label="Absolute value">|x|</button>
 
-                  <button type="button" class="scientific-key" data-insert="pi" aria-label="圆周率 pi">π</button>
-                  <button type="button" class="scientific-key" data-insert="e" aria-label="自然常数 e">e</button>
-                  <button type="button" class="scientific-key" data-action="square" aria-label="平方">x²</button>
-                  <button type="button" class="scientific-key" data-action="group" aria-label="插入一对括号">( )</button>
+                  <button type="button" class="scientific-key" data-insert="pi" aria-label="Pi constant">π</button>
+                  <button type="button" class="scientific-key" data-insert="e" aria-label="Euler's number">e</button>
+                  <button type="button" class="scientific-key" data-action="square" aria-label="Square">x²</button>
+                  <button type="button" class="scientific-key" data-action="group" aria-label="Insert parentheses">( )</button>
                 </div>
               </details>
 
-              <div class="keypad" id="keypad" aria-label="计算器按键">
-                <button type="button" class="key key-utility" data-action="clear" aria-label="清空表达式">AC</button>
-                <button type="button" class="key key-utility" data-insert="(" aria-label="左括号">(</button>
-                <button type="button" class="key key-utility" data-insert=")" aria-label="右括号">)</button>
-                <button type="button" class="key key-operator" data-insert="÷" aria-label="除号">÷</button>
+              <div class="keypad" id="keypad" aria-label="Calculator keys">
+                <button type="button" class="key key-utility" data-action="clear" aria-label="Clear expression">AC</button>
+                <button type="button" class="key key-utility" data-insert="(" aria-label="Open parenthesis">(</button>
+                <button type="button" class="key key-utility" data-insert=")" aria-label="Close parenthesis">)</button>
+                <button type="button" class="key key-operator" data-insert="÷" aria-label="Division">÷</button>
 
                 <button type="button" class="key" data-insert="7">7</button>
                 <button type="button" class="key" data-insert="8">8</button>
                 <button type="button" class="key" data-insert="9">9</button>
-                <button type="button" class="key key-operator" data-insert="×" aria-label="乘号">×</button>
+                <button type="button" class="key key-operator" data-insert="×" aria-label="Multiplication">×</button>
 
                 <button type="button" class="key" data-insert="4">4</button>
                 <button type="button" class="key" data-insert="5">5</button>
                 <button type="button" class="key" data-insert="6">6</button>
-                <button type="button" class="key key-operator" data-insert="−" aria-label="减号">−</button>
+                <button type="button" class="key key-operator" data-insert="−" aria-label="Subtraction">−</button>
 
                 <button type="button" class="key" data-insert="1">1</button>
                 <button type="button" class="key" data-insert="2">2</button>
                 <button type="button" class="key" data-insert="3">3</button>
-                <button type="button" class="key key-operator" data-insert="+" aria-label="加号">+</button>
+                <button type="button" class="key key-operator" data-insert="+" aria-label="Addition">+</button>
 
-                <button type="button" class="key key-utility" data-action="sign" aria-label="切换末尾数字正负号">±</button>
+                <button type="button" class="key key-utility" data-action="sign" aria-label="Change sign">±</button>
                 <button type="button" class="key" data-insert="0">0</button>
                 <button type="button" class="key" data-insert=".">.</button>
-                <button type="submit" class="key key-equals" id="calculate-button" aria-label="计算结果">=</button>
+                <button type="submit" class="key key-equals" id="calculate-button" aria-label="Calculate result">=</button>
               </div>
             </form>
           </section>
 
           <section class="history-card" aria-labelledby="history-heading">
             <div class="card-heading history-heading">
-              <h2 id="history-heading">历史记录</h2>
-              <button class="refresh-button" id="refresh-history" type="button" aria-label="刷新计算历史" title="刷新历史">
+              <h2 id="history-heading">History</h2>
+              <button class="refresh-button" id="refresh-history" type="button" aria-label="Refresh history" title="Refresh history">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5"/><path d="M4 17v-5h5"/><path d="M5.5 9a7 7 0 0 1 12-2L20 12M4 12l2.5 5a7 7 0 0 0 12-2"/></svg>
               </button>
             </div>
-            <div class="history-state" id="history-state" role="status" aria-live="polite">正在加载历史记录…</div>
-            <ol class="history-list" id="history-list" aria-label="计算历史列表"></ol>
+            <div class="history-state" id="history-state" role="status" aria-live="polite">Loading history...</div>
+            <ol class="history-list" id="history-list" aria-label="Calculation history"></ol>
           </section>
         </div>
       </main>

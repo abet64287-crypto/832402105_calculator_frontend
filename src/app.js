@@ -62,9 +62,9 @@ function activeTheme() {
 function updateTheme() {
   const dark = activeTheme() === 'dark';
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-  ELEMENTS.themeToggle.setAttribute('aria-label', dark ? '切换到浅色模式' : '切换到深色模式');
+  ELEMENTS.themeToggle.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
   ELEMENTS.themeIcon.textContent = dark ? '☀' : '☾';
-  ELEMENTS.themeLabel.textContent = dark ? '浅色模式' : '深色模式';
+  ELEMENTS.themeLabel.textContent = dark ? 'Light theme' : 'Dark theme';
   ELEMENTS.themeColor.content = dark ? '#0c171c' : '#f1f4f5';
 }
 
@@ -73,11 +73,11 @@ function normalizeApiBase(value) {
   try {
     parsed = new URL(value.trim());
   } catch {
-    throw new Error('请输入完整的 HTTP 或 HTTPS 地址。');
+    throw new Error('Enter a complete HTTP or HTTPS URL.');
   }
 
   if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || parsed.search || parsed.hash) {
-    throw new Error('请输入不含账号、查询参数的 HTTP 或 HTTPS 地址。');
+    throw new Error('Enter an HTTP or HTTPS URL without credentials, query parameters, or fragments.');
   }
 
   return `${parsed.origin}${parsed.pathname.replace(/\/$/, '')}`;
@@ -97,9 +97,9 @@ let calculating = false;
 function setConnection(state) {
   ELEMENTS.connectionStatus.dataset.state = state;
   const labels = {
-    connecting: '正在连接后端',
-    online: '后端已连接',
-    offline: '无法连接后端'
+    connecting: 'Connecting to backend',
+    online: 'Backend connected',
+    offline: 'Backend unavailable'
   };
   ELEMENTS.connectionLabel.textContent = labels[state];
 }
@@ -159,8 +159,8 @@ async function request(path, options = {}) {
       });
     } catch (error) {
       const message = error?.name === 'AbortError' || controller.signal.aborted
-        ? '请求超时，请检查后端服务后重试。'
-        : '无法连接后端服务，请检查接口地址和服务状态。';
+        ? 'Request timed out. Check the backend and try again.'
+        : 'Could not connect to the backend. Check the API URL and server.';
       throw new ApiError(message, true);
     }
 
@@ -174,17 +174,17 @@ async function request(path, options = {}) {
       payload = await response.json();
     } catch (error) {
       if (error?.name === 'AbortError' || controller.signal.aborted) {
-        throw new ApiError('请求超时，请检查后端服务后重试。', true);
+        throw new ApiError('Request timed out. Check the backend and try again.', true);
       }
-      throw new ApiError('后端返回的数据不是有效的 JSON。');
+      throw new ApiError('The backend did not return valid JSON.');
     }
 
     if (!payload || typeof payload !== 'object') {
-      throw new ApiError('后端返回的数据格式不正确。');
+      throw new ApiError('The backend returned an invalid response.');
     }
 
     if (!response.ok || payload.success === false) {
-      const message = payload.error?.message || payload.message || `请求失败（HTTP ${response.status}）。`;
+      const message = payload.error?.message || payload.message || `Request failed (HTTP ${response.status}).`;
       throw new ApiError(message);
     }
 
@@ -202,7 +202,7 @@ function setHistoryState(message, isError = false) {
 
 function formatTime(value) {
   if (!value) {
-    return '时间未知';
+    return 'Time unavailable';
   }
 
   const date = new Date(value);
@@ -210,7 +210,7 @@ function formatTime(value) {
     return String(value);
   }
 
-  return new Intl.DateTimeFormat('zh-CN', {
+  return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -227,7 +227,7 @@ function historyAction(label, className, recordId, action) {
   button.textContent = label;
   button.dataset.action = action;
   button.dataset.id = String(recordId);
-  button.setAttribute('aria-label', `${label}第 ${recordId} 条计算记录`);
+  button.setAttribute('aria-label', `${label} calculation record ${recordId}`);
   return button;
 }
 
@@ -235,7 +235,7 @@ function renderHistory(history) {
   ELEMENTS.historyList.replaceChildren();
 
   if (history.length === 0) {
-    setHistoryState('暂无记录');
+    setHistoryState('No history yet');
     return;
   }
 
@@ -265,8 +265,8 @@ function renderHistory(history) {
     const actions = document.createElement('div');
     actions.className = 'history-actions';
     actions.append(
-      historyAction('重用', 'reuse-button', record.id, 'reuse'),
-      historyAction('删除', 'delete-button', record.id, 'delete')
+      historyAction('Reuse', 'reuse-button', record.id, 'reuse'),
+      historyAction('Delete', 'delete-button', record.id, 'delete')
     );
 
     item.append(main, actions);
@@ -281,7 +281,7 @@ async function refreshHistory() {
   const version = ++historyRequestVersion;
   ELEMENTS.refreshHistory.disabled = true;
   ELEMENTS.historyList.replaceChildren();
-  setHistoryState('正在从后端读取历史记录…');
+  setHistoryState('Loading history...');
 
   try {
     const payload = await request('/api/history');
@@ -289,7 +289,7 @@ async function refreshHistory() {
       return;
     }
     if (!Array.isArray(payload.history)) {
-      throw new ApiError('历史记录的数据格式不正确。');
+      throw new ApiError('The history response has an invalid format.');
     }
     renderHistory(payload.history);
   } catch (error) {
@@ -299,7 +299,7 @@ async function refreshHistory() {
     if (error.isNetworkError) {
       setConnection('offline');
     }
-    setHistoryState(`历史记录读取失败：${error.message}`, true);
+    setHistoryState(`Could not load history: ${error.message}`, true);
   } finally {
     if (version === historyRequestVersion) {
       ELEMENTS.refreshHistory.disabled = false;
@@ -453,13 +453,13 @@ async function calculate() {
   resetResult();
 
   if (!expression) {
-    showCalculatorError('请先输入要计算的表达式。');
+    showCalculatorError('Enter an expression first.');
     ELEMENTS.expression.focus();
     return;
   }
 
   setCalculating(true);
-  ELEMENTS.resultExpression.textContent = '正在等待后端计算…';
+  ELEMENTS.resultExpression.textContent = 'Calculating on backend...';
 
   try {
     const payload = await request('/api/calculate', {
@@ -469,7 +469,7 @@ async function calculate() {
     });
 
     if (!Object.hasOwn(payload, 'result_text') && !Object.hasOwn(payload, 'result')) {
-      throw new ApiError('后端响应中缺少计算结果。');
+      throw new ApiError('The backend response did not include a result.');
     }
 
     ELEMENTS.result.textContent = String(payload.result_text ?? payload.result);
@@ -488,7 +488,7 @@ async function calculate() {
 
 async function deleteHistory(id, button) {
   button.disabled = true;
-  button.textContent = '删除中';
+  button.textContent = 'Deleting...';
   try {
     await request(`/api/history/${encodeURIComponent(id)}`, { method: 'DELETE' });
     await refreshHistory();
@@ -497,8 +497,8 @@ async function deleteHistory(id, button) {
       setConnection('offline');
     }
     button.disabled = false;
-    button.textContent = '删除';
-    setHistoryState(`删除失败：${error.message}`, true);
+    button.textContent = 'Delete';
+    setHistoryState(`Could not delete record: ${error.message}`, true);
   }
 }
 
