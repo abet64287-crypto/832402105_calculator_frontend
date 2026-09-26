@@ -38,6 +38,8 @@ python -m http.server 5173 --directory src
 
 Render 后端的 `CALCULATOR_ALLOWED_ORIGINS` 应设为 **`https://abet64287-crypto.github.io`**。这是浏览器请求的 Origin，**不包含** `/832402105_calculator_frontend/` 仓库路径，也不要加末尾斜杠。前端网页完整地址则包含上述仓库路径。若浏览器以前保存过本地 API 地址，`localStorage` 会覆盖线上默认配置；在页面的 **API settings** 中改成 Render HTTPS 地址并保存。
 
+Render 的免费 Web Service 闲置后可能需要约一分钟唤醒。前端对 HTTPS API 请求最多等待 90 秒，页面会在此期间显示连接中；本地 HTTP 请求仍使用 12 秒超时。
+
 ## 功能与操作
 
 - 输入框可直接输入 `1+2*3`、`(1+2)*3`、`-5+8`、`3*-2`、`0.1+0.2` 等表达式，也能使用屏幕按键。乘除按键显示为 `×`、`÷`，请求时转为 `*`、`/`。
