@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f1f4f5" />
     <title>表达式计算器</title>
+    <script>
+      (() => {
+        let preference = null;
+        try {
+          preference = localStorage.getItem('calculator-theme');
+        } catch {
+          // Browser storage can be unavailable in a private session.
+        }
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = preference === 'dark' || (preference !== 'light' && systemDark)
+          ? 'dark'
+          : 'light';
+      })();
+    </script>
     <link rel="stylesheet" href="./styles.css" />
     <script defer src="./config.js"></script>
     <script defer src="./app.js"></script>
@@ -19,19 +33,25 @@
             <h1>表达式计算器</h1>
           </div>
         </div>
-        <details class="settings" id="settings">
-          <summary aria-label="打开接口设置">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.6 2h2.8l.5 2.3c.5.2 1 .4 1.4.8l2.1-1.1 2 2-1.1 2.1c.3.4.6.9.8 1.4l2.3.5v2.8l-2.3.5c-.2.5-.5 1-.8 1.4l1.1 2.1-2 2-2.1-1.1c-.4.3-.9.6-1.4.8l-.5 2.3h-2.8l-.5-2.3c-.5-.2-1-.5-1.4-.8l-2.1 1.1-2-2 1.1-2.1c-.3-.4-.6-.9-.8-1.4L2 13.4v-2.8l2.3-.5c.2-.5.5-1 .8-1.4L4 6.6l2-2 2.1 1.1c.4-.3.9-.6 1.4-.8L10.6 2Z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span>接口设置</span>
-          </summary>
-          <form id="settings-form" class="settings-panel">
-            <label for="api-url">后端 API 地址</label>
-            <input id="api-url" name="api-url" type="url" inputmode="url" autocomplete="url" spellcheck="false" aria-label="后端 API 地址" required />
-            <p>部署后可在这里填写公开的后端地址。</p>
-            <button type="submit" aria-label="保存后端地址并重新连接">保存并重新连接</button>
-            <span class="settings-error" id="settings-error" role="alert"></span>
-          </form>
-        </details>
+        <div class="header-actions">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换到深色模式">
+            <span class="theme-icon" id="theme-icon" aria-hidden="true">☾</span>
+            <span id="theme-label">深色模式</span>
+          </button>
+          <details class="settings" id="settings">
+            <summary aria-label="打开接口设置">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.6 2h2.8l.5 2.3c.5.2 1 .4 1.4.8l2.1-1.1 2 2-1.1 2.1c.3.4.6.9.8 1.4l2.3.5v2.8l-2.3.5c-.2.5-.5 1-.8 1.4l1.1 2.1-2 2-2.1-1.1c-.4.3-.9.6-1.4.8l-.5 2.3h-2.8l-.5-2.3c-.5-.2-1-.5-1.4-.8l-2.1 1.1-2-2 1.1-2.1c-.3-.4-.6-.9-.8-1.4L2 13.4v-2.8l2.3-.5c.2-.5.5-1 .8-1.4L4 6.6l2-2 2.1 1.1c.4-.3.9-.6 1.4-.8L10.6 2Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span>接口设置</span>
+            </summary>
+            <form id="settings-form" class="settings-panel">
+              <label for="api-url">后端 API 地址</label>
+              <input id="api-url" name="api-url" type="url" inputmode="url" autocomplete="url" spellcheck="false" aria-label="后端 API 地址" required />
+              <p>部署后可在这里填写公开的后端地址。</p>
+              <button type="submit" aria-label="保存后端地址并重新连接">保存并重新连接</button>
+              <span class="settings-error" id="settings-error" role="alert"></span>
+            </form>
+          </details>
+        </div>
       </header>
 
       <main>
@@ -39,7 +59,7 @@
           <div>
             <p class="section-kicker">CALCULATE &amp; REVIEW</p>
             <h2>计算清晰，记录可查。</h2>
-            <p>输入四则运算表达式，支持括号、小数和正负数。</p>
+            <p>输入四则与科学计算表达式，支持括号、小数和正负数。</p>
           </div>
           <div class="connection-status" id="connection-status" data-state="connecting" role="status" aria-live="polite">
             <span class="status-dot" aria-hidden="true"></span>
@@ -72,8 +92,32 @@
                 </div>
               </div>
 
-              <p id="expression-hint" class="input-hint">可直接键入表达式，按 Enter 计算，Esc 清空。</p>
+              <p id="expression-hint" class="input-hint">可直接键入表达式，按 Enter 计算，Esc 清空；科学函数请展开下方按键。</p>
               <p id="calculator-error" class="calculator-error" role="alert" aria-live="assertive" hidden></p>
+
+              <details class="scientific-tools" id="scientific-tools">
+                <summary>
+                  <span>科学计算</span>
+                  <span class="scientific-mode">三角函数：RAD 弧度</span>
+                </summary>
+                <div class="scientific-keypad" id="scientific-keypad" aria-label="科学计算按键">
+                  <button type="button" class="scientific-key" data-function="sin" aria-label="正弦 sin，弧度">sin</button>
+                  <button type="button" class="scientific-key" data-function="cos" aria-label="余弦 cos，弧度">cos</button>
+                  <button type="button" class="scientific-key" data-function="tan" aria-label="正切 tan，弧度">tan</button>
+                  <button type="button" class="scientific-key" data-insert="^" aria-label="幂运算">xʸ</button>
+
+                  <button type="button" class="scientific-key" data-function="sqrt" aria-label="平方根 sqrt">√x</button>
+                  <button type="button" class="scientific-key" data-function="ln" aria-label="自然对数 ln">ln</button>
+                  <button type="button" class="scientific-key" data-function="log" aria-label="常用对数 log，以 10 为底">log₁₀</button>
+                  <button type="button" class="scientific-key" data-function="abs" aria-label="绝对值 abs">|x|</button>
+
+                  <button type="button" class="scientific-key" data-insert="pi" aria-label="圆周率 pi">π</button>
+                  <button type="button" class="scientific-key" data-insert="e" aria-label="自然常数 e">e</button>
+                  <button type="button" class="scientific-key" data-action="square" aria-label="平方">x²</button>
+                  <button type="button" class="scientific-key" data-action="group" aria-label="插入一对括号">( )</button>
+                </div>
+                <p class="scientific-hint">函数按键会补全括号；log 以 10 为底。数字与常量相乘时请输入 ×。</p>
+              </details>
 
               <div class="keypad" id="keypad" aria-label="计算器按键">
                 <button type="button" class="key key-utility" data-action="clear" aria-label="清空表达式">AC</button>
@@ -123,7 +167,7 @@
       </main>
 
       <footer class="site-footer">
-        <span>键盘操作：数字、运算符、括号、Enter、Backspace、Esc</span>
+        <span>键盘操作：数字、运算符、幂 ^、括号、Enter、Backspace、Esc</span>
         <span>前端界面 · 后端计算 · 数据库记录</span>
       </footer>
     </div>

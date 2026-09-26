@@ -6,7 +6,7 @@
   -webkit-font-smoothing: antialiased;
   --page: #f1f4f5;
   --ink: #182832;
-  --muted: #6b7c84;
+  --muted: #5e7179;
   --line: #e1e8ea;
   --teal: #0a7b73;
   --teal-dark: #086c65;
@@ -95,6 +95,38 @@ summary:focus-visible {
   font-size: 17px;
   font-weight: 750;
   letter-spacing: 0.03em;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 39px;
+  padding: 8px 12px;
+  border: 1px solid #cddadc;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #34515a;
+  font-size: 13px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  border-color: #9cbdb8;
+  background: #fff;
+}
+
+.theme-icon {
+  font-size: 19px;
+  line-height: 1;
 }
 
 .settings {
@@ -294,7 +326,7 @@ summary:focus-visible {
 }
 
 .card-note {
-  color: #8b999e;
+  color: #63777d;
   font-size: 11px;
   white-space: nowrap;
 }
@@ -392,7 +424,7 @@ summary:focus-visible {
 
 .input-hint {
   margin: 12px 2px 15px;
-  color: #849398;
+  color: #5f7379;
   font-size: 12px;
 }
 
@@ -409,6 +441,91 @@ summary:focus-visible {
 
 .calculator-error[hidden] {
   display: none;
+}
+
+.scientific-tools {
+  margin-bottom: 15px;
+  border: 1px solid #dce8e8;
+  border-radius: 11px;
+  background: #f8fbfa;
+}
+
+.scientific-tools summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 45px;
+  padding: 10px 13px;
+  color: #315d60;
+  font-size: 13px;
+  font-weight: 750;
+  list-style: none;
+  cursor: pointer;
+}
+
+.scientific-tools summary::-webkit-details-marker {
+  display: none;
+}
+
+.scientific-tools summary::before {
+  content: '+';
+  width: 17px;
+  color: var(--teal);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+}
+
+.scientific-tools[open] summary::before {
+  content: '−';
+}
+
+.scientific-tools summary > span:first-child {
+  flex: 1;
+}
+
+.scientific-mode {
+  color: #46696d;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.scientific-keypad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 12px 10px;
+}
+
+.scientific-key {
+  min-height: 43px;
+  padding: 5px 3px;
+  border: 1px solid #d8e7e5;
+  border-radius: 8px;
+  background: #ecf5f3;
+  color: #205d59;
+  font-size: 14px;
+  font-weight: 700;
+  transition: background 120ms ease, transform 120ms ease, border-color 120ms ease;
+}
+
+.scientific-key:hover {
+  border-color: #a8cec7;
+  background: #ddf0eb;
+}
+
+.scientific-key:active {
+  transform: scale(0.97);
+}
+
+.scientific-hint {
+  margin: 0;
+  padding: 0 13px 12px;
+  color: #526c70;
+  font-size: 11px;
+  line-height: 1.5;
 }
 
 .keypad {
@@ -480,7 +597,7 @@ summary:focus-visible {
 
 .history-description {
   margin: 0 0 21px;
-  color: #849398;
+  color: #5f7379;
   font-size: 13px;
   line-height: 1.6;
 }
@@ -493,7 +610,7 @@ summary:focus-visible {
   border: 1px dashed #d9e4e6;
   border-radius: 12px;
   background: #fafcfc;
-  color: #74868d;
+  color: #566c74;
   font-size: 13px;
   line-height: 1.6;
   text-align: center;
@@ -558,7 +675,7 @@ summary:focus-visible {
 
 .history-time {
   margin-top: 4px;
-  color: #9ba9ad;
+  color: #62767c;
   font-size: 11px;
 }
 
@@ -593,7 +710,7 @@ summary:focus-visible {
 
 .history-footnote {
   margin: 17px 0 0;
-  color: #9aa8ad;
+  color: #62767c;
   font-size: 11px;
   line-height: 1.55;
 }
@@ -603,8 +720,212 @@ summary:focus-visible {
   justify-content: space-between;
   gap: 16px;
   padding: 24px 2px 30px;
-  color: #9aa8ad;
+  color: #5c7077;
   font-size: 11px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0c171c;
+  --ink: #e8f1f2;
+  --muted: #a6bcc1;
+  --line: #30454c;
+  --teal: #78dac8;
+  --teal-dark: #59c9b7;
+  --card: #17272f;
+}
+
+:root[data-theme="dark"] body {
+  background: radial-gradient(circle at 88% 0%, #16363d 0, transparent 32%), var(--page);
+}
+
+:root[data-theme="dark"] .site-header {
+  border-bottom-color: #294149;
+}
+
+:root[data-theme="dark"] .brand-mark {
+  background: #214a4a;
+  color: #d9fff0;
+}
+
+:root[data-theme="dark"] .theme-toggle,
+:root[data-theme="dark"] .settings summary {
+  border-color: #3b5860;
+  background: #20343c;
+  color: #ddedee;
+}
+
+:root[data-theme="dark"] .theme-toggle:hover,
+:root[data-theme="dark"] .settings summary:hover,
+:root[data-theme="dark"] .refresh-button:hover {
+  border-color: #6cb9aa;
+  background: #29464d;
+}
+
+:root[data-theme="dark"] .settings-panel {
+  background: #1b3038;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] .settings-panel input {
+  border-color: #45616a;
+  background: #102128;
+}
+
+:root[data-theme="dark"] .settings-panel button {
+  background: #117a70;
+}
+
+:root[data-theme="dark"] .settings-error {
+  color: #ffaaa1;
+}
+
+:root[data-theme="dark"] .connection-status {
+  border-color: #285e54;
+  background: #143c35;
+  color: #a9efd7;
+}
+
+:root[data-theme="dark"] .connection-status[data-state="connecting"] {
+  border-color: #615738;
+  background: #403922;
+  color: #f1d68d;
+}
+
+:root[data-theme="dark"] .connection-status[data-state="offline"] {
+  border-color: #76443f;
+  background: #4b292a;
+  color: #ffb5aa;
+}
+
+:root[data-theme="dark"] .calculator-card,
+:root[data-theme="dark"] .history-card {
+  border-color: #30444b;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
+:root[data-theme="dark"] .card-note,
+:root[data-theme="dark"] .input-hint,
+:root[data-theme="dark"] .history-description,
+:root[data-theme="dark"] .history-footnote,
+:root[data-theme="dark"] .site-footer {
+  color: #a3b7bb;
+}
+
+:root[data-theme="dark"] .display {
+  background: linear-gradient(145deg, #0d1a20, #12262d);
+}
+
+:root[data-theme="dark"] .calculator-error {
+  border-color: #824c47;
+  background: #43292c;
+  color: #ffc1b8;
+}
+
+:root[data-theme="dark"] .scientific-tools {
+  border-color: #38535b;
+  background: #1c333a;
+}
+
+:root[data-theme="dark"] .scientific-tools summary {
+  color: #d4eeee;
+}
+
+:root[data-theme="dark"] .scientific-mode,
+:root[data-theme="dark"] .scientific-hint {
+  color: #a6c3c3;
+}
+
+:root[data-theme="dark"] .scientific-key {
+  border-color: #3d5d60;
+  background: #274149;
+  color: #c9f3e8;
+}
+
+:root[data-theme="dark"] .scientific-key:hover {
+  border-color: #71b8a9;
+  background: #31545a;
+}
+
+:root[data-theme="dark"] .key {
+  border-color: #334c54;
+  background: #263a43;
+  color: #e6f0f1;
+}
+
+:root[data-theme="dark"] .key:hover {
+  border-color: #58807d;
+  background: #304b52;
+}
+
+:root[data-theme="dark"] .key-utility {
+  background: #2b454d;
+  color: #c9e8e6;
+}
+
+:root[data-theme="dark"] .key-operator {
+  border-color: #396c65;
+  background: #20524f;
+  color: #b9f6e7;
+}
+
+:root[data-theme="dark"] .key-equals,
+:root[data-theme="dark"] .key-equals:hover {
+  border-color: #1a8e7d;
+  background: #157a70;
+  color: #fff;
+}
+
+:root[data-theme="dark"] .key-equals:hover {
+  background: #198f82;
+}
+
+:root[data-theme="dark"] .refresh-button {
+  border-color: #405b62;
+  background: #263e45;
+  color: #c3e3df;
+}
+
+:root[data-theme="dark"] .history-state {
+  border-color: #435961;
+  background: #1c3037;
+  color: #bed1d3;
+}
+
+:root[data-theme="dark"] .history-state[data-error="true"] {
+  border-color: #824c47;
+  background: #43292c;
+  color: #ffc1b8;
+}
+
+:root[data-theme="dark"] .history-list {
+  scrollbar-color: #4d6a6e transparent;
+}
+
+:root[data-theme="dark"] .history-item {
+  border-color: #354a52;
+  background: #1d3038;
+}
+
+:root[data-theme="dark"] .history-expression,
+:root[data-theme="dark"] .history-time {
+  color: #a8bdc2;
+}
+
+:root[data-theme="dark"] .history-result {
+  color: #edf7f7;
+}
+
+:root[data-theme="dark"] .history-actions button:hover {
+  background: #294e48;
+}
+
+:root[data-theme="dark"] .history-actions .delete-button {
+  color: #ffb4aa;
+}
+
+:root[data-theme="dark"] .history-actions .delete-button:hover {
+  background: #513333;
 }
 
 @media (max-width: 800px) {
@@ -647,6 +968,16 @@ summary:focus-visible {
   }
 
   .settings summary span {
+    display: none;
+  }
+
+  .theme-toggle {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+  }
+
+  .theme-toggle #theme-label {
     display: none;
   }
 

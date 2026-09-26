@@ -1,5 +1,7 @@
 const DEFAULT_API_BASE = window.CALCULATOR_API_BASE_URL || 'http://127.0.0.1:8000';
 const API_STORAGE_KEY = 'calculator-api-base-url';
+const THEME_STORAGE_KEY = 'calculator-theme';
+const SYSTEM_DARK_THEME = window.matchMedia('(prefers-color-scheme: dark)');
 
 const ELEMENTS = {
   expression: document.querySelector('#expression'),
@@ -9,7 +11,12 @@ const ELEMENTS = {
   calculatorError: document.querySelector('#calculator-error'),
   calculateButton: document.querySelector('#calculate-button'),
   keypad: document.querySelector('#keypad'),
+  scientificKeypad: document.querySelector('#scientific-keypad'),
   backspaceButton: document.querySelector('#backspace-button'),
+  themeToggle: document.querySelector('#theme-toggle'),
+  themeIcon: document.querySelector('#theme-icon'),
+  themeLabel: document.querySelector('#theme-label'),
+  themeColor: document.querySelector('meta[name="theme-color"]'),
   historyList: document.querySelector('#history-list'),
   historyState: document.querySelector('#history-state'),
   refreshHistory: document.querySelector('#refresh-history'),
@@ -35,6 +42,30 @@ function savedApiBase() {
   } catch {
     return DEFAULT_API_BASE;
   }
+}
+
+function savedTheme() {
+  try {
+    const value = localStorage.getItem(THEME_STORAGE_KEY);
+    return value === 'light' || value === 'dark' ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+let themePreference = savedTheme();
+
+function activeTheme() {
+  return themePreference || (SYSTEM_DARK_THEME.matches ? 'dark' : 'light');
+}
+
+function updateTheme() {
+  const dark = activeTheme() === 'dark';
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  ELEMENTS.themeToggle.setAttribute('aria-label', dark ? '切换到浅色模式' : '切换到深色模式');
+  ELEMENTS.themeIcon.textContent = dark ? '☀' : '☾';
+  ELEMENTS.themeLabel.textContent = dark ? '浅色模式' : '深色模式';
+  ELEMENTS.themeColor.content = dark ? '#0c171c' : '#f1f4f5';
 }
 
 function normalizeApiBase(value) {
@@ -95,6 +126,9 @@ function setCalculating(value) {
   ELEMENTS.calculateButton.setAttribute('aria-busy', String(value));
   ELEMENTS.calculateButton.textContent = value ? '···' : '=';
   ELEMENTS.keypad.querySelectorAll('button').forEach((button) => {
+    button.disabled = value;
+  });
+  ELEMENTS.scientificKeypad.querySelectorAll('button').forEach((button) => {
     button.disabled = value;
   });
   ELEMENTS.settingsForm.querySelector('button').disabled = value;
@@ -286,6 +320,55 @@ function insertAtCursor(text) {
   input.focus();
 }
 
+function insertFunctionAtCursor(name) {
+  if (calculating) {
+    return;
+  }
+
+  const input = ELEMENTS.expression;
+  const start = input.selectionStart ?? input.value.length;
+  const end = input.selectionEnd ?? input.value.length;
+  const selected = input.value.slice(start, end);
+  input.setRangeText(`${name}(${selected})`, start, end, 'end');
+  if (start === end) {
+    const argumentStart = start + name.length + 1;
+    input.setSelectionRange(argumentStart, argumentStart);
+  }
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.focus();
+}
+
+function groupAtCursor() {
+  if (calculating) {
+    return;
+  }
+
+  const input = ELEMENTS.expression;
+  const start = input.selectionStart ?? input.value.length;
+  const end = input.selectionEnd ?? input.value.length;
+  const selected = input.value.slice(start, end);
+  input.setRangeText(`(${selected})`, start, end, 'end');
+  if (start === end) {
+    input.setSelectionRange(start + 1, start + 1);
+  }
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.focus();
+}
+
+function squareAtCursor() {
+  if (calculating) {
+    return;
+  }
+
+  const input = ELEMENTS.expression;
+  const start = input.selectionStart ?? input.value.length;
+  const end = input.selectionEnd ?? input.value.length;
+  const selected = input.value.slice(start, end);
+  input.setRangeText(selected ? `(${selected})^2` : '^2', start, end, 'end');
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.focus();
+}
+
 function clearExpression() {
   if (calculating) {
     return;
@@ -344,7 +427,7 @@ function toggleSign() {
       const sign = input.value[signIndex];
       const beforeSign = previousNonSpace(input.value, signIndex - 1);
       const isUnarySign = ['+', '-', '−'].includes(sign)
-        && (beforeSign === null || '+-−*/×÷('.includes(beforeSign));
+        && (beforeSign === null || '+-−*/×÷(^'.includes(beforeSign));
 
       if (isUnarySign && (sign === '-' || sign === '−')) {
         input.setRangeText('', signIndex, numberStart, 'end');
@@ -444,6 +527,39 @@ ELEMENTS.keypad.addEventListener('click', (event) => {
   }
 });
 
+ELEMENTS.scientificKeypad.addEventListener('click', (event) => {
+  const button = event.target.closest('button');
+  if (!button || button.disabled) {
+    return;
+  }
+
+  if (button.dataset.function) {
+    insertFunctionAtCursor(button.dataset.function);
+  } else if (button.dataset.insert) {
+    insertAtCursor(button.dataset.insert);
+  } else if (button.dataset.action === 'square') {
+    squareAtCursor();
+  } else if (button.dataset.action === 'group') {
+    groupAtCursor();
+  }
+});
+
+ELEMENTS.themeToggle.addEventListener('click', () => {
+  themePreference = activeTheme() === 'dark' ? 'light' : 'dark';
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, themePreference);
+  } catch {
+    // Theme still works for this session when storage is unavailable.
+  }
+  updateTheme();
+});
+
+SYSTEM_DARK_THEME.addEventListener('change', () => {
+  if (themePreference === null) {
+    updateTheme();
+  }
+});
+
 ELEMENTS.backspaceButton.addEventListener('click', backspace);
 ELEMENTS.refreshHistory.addEventListener('click', refreshHistory);
 
@@ -513,11 +629,12 @@ document.addEventListener('keydown', (event) => {
   } else if (event.key === 'Backspace') {
     event.preventDefault();
     backspace();
-  } else if (/^[0-9.+\-*/()×÷−]$/.test(event.key)) {
+  } else if (/^[0-9.+\-*/()×÷−^]$/.test(event.key)) {
     event.preventDefault();
     insertAtCursor(event.key);
   }
 });
 
+updateTheme();
 refreshHistory();
 
