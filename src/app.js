@@ -116,7 +116,7 @@ function clearCalculatorError() {
 
 function resetResult() {
   ELEMENTS.result.textContent = '—';
-  ELEMENTS.resultExpression.textContent = '等待计算';
+  ELEMENTS.resultExpression.textContent = '';
 }
 
 function setCalculating(value) {
@@ -235,7 +235,7 @@ function renderHistory(history) {
   ELEMENTS.historyList.replaceChildren();
 
   if (history.length === 0) {
-    setHistoryState('暂无计算记录。完成一次计算后，记录会显示在这里。');
+    setHistoryState('暂无记录');
     return;
   }
 

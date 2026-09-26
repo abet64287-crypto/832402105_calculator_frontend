@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f1f4f5" />
-    <title>表达式计算器</title>
+    <title>计算器</title>
     <script>
       (() => {
         let preference = null;
@@ -26,13 +26,7 @@
   <body>
     <div class="app-shell">
       <header class="site-header">
-        <div class="brand">
-          <span class="brand-mark" aria-hidden="true">∑</span>
-          <div>
-            <p class="eyebrow">EXPRESSION CALCULATOR</p>
-            <h1>表达式计算器</h1>
-          </div>
-        </div>
+        <h1>计算器</h1>
         <div class="header-actions">
           <button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换到深色模式">
             <span class="theme-icon" id="theme-icon" aria-hidden="true">☾</span>
@@ -46,7 +40,6 @@
             <form id="settings-form" class="settings-panel">
               <label for="api-url">后端 API 地址</label>
               <input id="api-url" name="api-url" type="url" inputmode="url" autocomplete="url" spellcheck="false" aria-label="后端 API 地址" required />
-              <p>部署后可在这里填写公开的后端地址。</p>
               <button type="submit" aria-label="保存后端地址并重新连接">保存并重新连接</button>
               <span class="settings-error" id="settings-error" role="alert"></span>
             </form>
@@ -56,11 +49,6 @@
 
       <main>
         <div class="intro">
-          <div>
-            <p class="section-kicker">CALCULATE &amp; REVIEW</p>
-            <h2>计算清晰，记录可查。</h2>
-            <p>输入四则与科学计算表达式，支持括号、小数和正负数。</p>
-          </div>
           <div class="connection-status" id="connection-status" data-state="connecting" role="status" aria-live="polite">
             <span class="status-dot" aria-hidden="true"></span>
             <span id="connection-label">正在连接后端</span>
@@ -70,11 +58,7 @@
         <div class="workspace">
           <section class="calculator-card" aria-labelledby="calculator-heading">
             <div class="card-heading">
-              <div>
-                <p class="card-index">01 / CALCULATOR</p>
-                <h3 id="calculator-heading">开始计算</h3>
-              </div>
-              <span class="card-note">结果由后端返回</span>
+              <h2 id="calculator-heading">计算</h2>
             </div>
 
             <form id="calculator-form" novalidate>
@@ -85,14 +69,13 @@
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9a2 2 0 0 1-1.5-.7L2 12l5.5-7.3A2 2 0 0 1 9 4Z"/><path d="m12 9 6 6m0-6-6 6"/></svg>
                   </button>
                 </div>
-                <input id="expression" name="expression" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 (1+2)×3" aria-describedby="expression-hint" />
+                <input id="expression" name="expression" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" />
                 <div class="result-area">
-                  <span id="result-expression">等待计算</span>
+                  <span id="result-expression"></span>
                   <output id="result" for="expression" aria-live="polite" aria-atomic="true">—</output>
                 </div>
               </div>
 
-              <p id="expression-hint" class="input-hint">可直接键入表达式，按 Enter 计算，Esc 清空；科学函数请展开下方按键。</p>
               <p id="calculator-error" class="calculator-error" role="alert" aria-live="assertive" hidden></p>
 
               <details class="scientific-tools" id="scientific-tools">
@@ -116,7 +99,6 @@
                   <button type="button" class="scientific-key" data-action="square" aria-label="平方">x²</button>
                   <button type="button" class="scientific-key" data-action="group" aria-label="插入一对括号">( )</button>
                 </div>
-                <p class="scientific-hint">函数按键会补全括号；log 以 10 为底。数字与常量相乘时请输入 ×。</p>
               </details>
 
               <div class="keypad" id="keypad" aria-label="计算器按键">
@@ -150,26 +132,16 @@
 
           <section class="history-card" aria-labelledby="history-heading">
             <div class="card-heading history-heading">
-              <div>
-                <p class="card-index">02 / HISTORY</p>
-                <h3 id="history-heading">计算历史</h3>
-              </div>
+              <h2 id="history-heading">历史记录</h2>
               <button class="refresh-button" id="refresh-history" type="button" aria-label="刷新计算历史" title="刷新历史">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5"/><path d="M4 17v-5h5"/><path d="M5.5 9a7 7 0 0 1 12-2L20 12M4 12l2.5 5a7 7 0 0 0 12-2"/></svg>
               </button>
             </div>
-            <p class="history-description">每次成功计算都会自动保存。记录来自后端数据库。</p>
             <div class="history-state" id="history-state" role="status" aria-live="polite">正在加载历史记录…</div>
             <ol class="history-list" id="history-list" aria-label="计算历史列表"></ol>
-            <p class="history-footnote">点击“重用”可再次编辑表达式；删除只影响所选记录。</p>
           </section>
         </div>
       </main>
-
-      <footer class="site-footer">
-        <span>键盘操作：数字、运算符、幂 ^、括号、Enter、Backspace、Esc</span>
-        <span>前端界面 · 后端计算 · 数据库记录</span>
-      </footer>
     </div>
   </body>
 </html>

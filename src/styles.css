@@ -6,7 +6,6 @@
   -webkit-font-smoothing: antialiased;
   --page: #f1f4f5;
   --ink: #182832;
-  --muted: #5e7179;
   --line: #e1e8ea;
   --teal: #0a7b73;
   --teal-dark: #086c65;
@@ -57,44 +56,14 @@ summary:focus-visible {
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  padding: 34px 0 31px;
+  padding: 24px 0;
   border-bottom: 1px solid #d9e3e5;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: var(--ink);
-  color: #e7f8f4;
-  font-family: Georgia, serif;
-  font-size: 29px;
-  line-height: 1;
-}
-
-.eyebrow,
-.section-kicker,
-.card-index {
+.site-header h1 {
   margin: 0;
-  color: var(--teal);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-}
-
-.brand h1 {
-  margin: 3px 0 0;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 750;
-  letter-spacing: 0.03em;
 }
 
 .header-actions {
@@ -199,15 +168,9 @@ summary:focus-visible {
   font-size: 13px;
 }
 
-.settings-panel p {
-  margin: 9px 0 14px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.5;
-}
-
 .settings-panel button {
   width: 100%;
+  margin-top: 14px;
   padding: 11px;
   border: 0;
   border-radius: 9px;
@@ -230,23 +193,8 @@ summary:focus-visible {
 
 .intro {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 20px;
-  padding: 33px 1px 28px;
-}
-
-.intro h2 {
-  margin: 8px 0 6px;
-  font-size: clamp(24px, 3vw, 31px);
-  font-weight: 760;
-  letter-spacing: -0.045em;
-}
-
-.intro p:last-child {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
+  justify-content: flex-end;
+  padding: 16px 1px;
 }
 
 .connection-status {
@@ -296,14 +244,15 @@ summary:focus-visible {
 .workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.87fr);
-  align-items: stretch;
+  align-items: start;
   gap: 22px;
+  padding-bottom: 28px;
 }
 
 .calculator-card,
 .history-card {
   min-width: 0;
-  padding: 28px;
+  padding: 24px;
   border: 1px solid #e1e8e9;
   border-radius: 22px;
   background: var(--card);
@@ -313,27 +262,21 @@ summary:focus-visible {
 .card-heading {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   gap: 15px;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
-.card-heading h3 {
-  margin: 6px 0 0;
+.card-heading h2 {
+  margin: 0;
   font-size: 20px;
   font-weight: 760;
   letter-spacing: -0.03em;
 }
 
-.card-note {
-  color: #63777d;
-  font-size: 11px;
-  white-space: nowrap;
-}
-
 .display {
-  min-height: 202px;
-  padding: 19px 21px 18px;
+  min-height: 168px;
+  padding: 16px 21px 15px;
   border-radius: 16px;
   background: linear-gradient(145deg, #1c333e, #10252e);
   color: #fff;
@@ -367,8 +310,8 @@ summary:focus-visible {
 
 .display input {
   width: 100%;
-  height: 56px;
-  margin-top: 5px;
+  height: 48px;
+  margin-top: 3px;
   padding: 0;
   border: 0;
   outline: 0;
@@ -397,8 +340,8 @@ summary:focus-visible {
   justify-content: space-between;
   align-items: flex-end;
   gap: 16px;
-  min-height: 75px;
-  padding-top: 18px;
+  min-height: 56px;
+  padding-top: 12px;
   border-top: 1px solid rgba(204, 230, 230, 0.18);
 }
 
@@ -422,14 +365,8 @@ summary:focus-visible {
   text-align: right;
 }
 
-.input-hint {
-  margin: 12px 2px 15px;
-  color: #5f7379;
-  font-size: 12px;
-}
-
 .calculator-error {
-  margin: 0 0 14px;
+  margin: 14px 0;
   padding: 10px 12px;
   border: 1px solid #f1d7d1;
   border-radius: 9px;
@@ -444,7 +381,7 @@ summary:focus-visible {
 }
 
 .scientific-tools {
-  margin-bottom: 15px;
+  margin: 15px 0;
   border: 1px solid #dce8e8;
   border-radius: 11px;
   background: #f8fbfa;
@@ -520,14 +457,6 @@ summary:focus-visible {
   transform: scale(0.97);
 }
 
-.scientific-hint {
-  margin: 0;
-  padding: 0 13px 12px;
-  color: #526c70;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
 .keypad {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -581,7 +510,7 @@ summary:focus-visible {
 }
 
 .history-heading {
-  margin-bottom: 13px;
+  margin-bottom: 18px;
 }
 
 .refresh-button {
@@ -593,13 +522,6 @@ summary:focus-visible {
   border-radius: 9px;
   background: #f7faf9;
   color: #53777b;
-}
-
-.history-description {
-  margin: 0 0 21px;
-  color: #5f7379;
-  font-size: 13px;
-  line-height: 1.6;
 }
 
 .history-state {
@@ -708,27 +630,10 @@ summary:focus-visible {
   background: #fff0ee;
 }
 
-.history-footnote {
-  margin: 17px 0 0;
-  color: #62767c;
-  font-size: 11px;
-  line-height: 1.55;
-}
-
-.site-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 24px 2px 30px;
-  color: #5c7077;
-  font-size: 11px;
-}
-
 :root[data-theme="dark"] {
   color-scheme: dark;
   --page: #0c171c;
   --ink: #e8f1f2;
-  --muted: #a6bcc1;
   --line: #30454c;
   --teal: #78dac8;
   --teal-dark: #59c9b7;
@@ -741,11 +646,6 @@ summary:focus-visible {
 
 :root[data-theme="dark"] .site-header {
   border-bottom-color: #294149;
-}
-
-:root[data-theme="dark"] .brand-mark {
-  background: #214a4a;
-  color: #d9fff0;
 }
 
 :root[data-theme="dark"] .theme-toggle,
@@ -804,14 +704,6 @@ summary:focus-visible {
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
 }
 
-:root[data-theme="dark"] .card-note,
-:root[data-theme="dark"] .input-hint,
-:root[data-theme="dark"] .history-description,
-:root[data-theme="dark"] .history-footnote,
-:root[data-theme="dark"] .site-footer {
-  color: #a3b7bb;
-}
-
 :root[data-theme="dark"] .display {
   background: linear-gradient(145deg, #0d1a20, #12262d);
 }
@@ -831,8 +723,7 @@ summary:focus-visible {
   color: #d4eeee;
 }
 
-:root[data-theme="dark"] .scientific-mode,
-:root[data-theme="dark"] .scientific-hint {
+:root[data-theme="dark"] .scientific-mode {
   color: #a6c3c3;
 }
 
@@ -944,20 +835,11 @@ summary:focus-visible {
   }
 
   .site-header {
-    padding: 20px 0;
+    padding: 16px 0;
   }
 
-  .brand-mark {
-    width: 39px;
-    height: 39px;
-  }
-
-  .brand h1 {
-    font-size: 15px;
-  }
-
-  .eyebrow {
-    font-size: 8px;
+  .site-header h1 {
+    font-size: 18px;
   }
 
   .settings summary {
@@ -982,18 +864,7 @@ summary:focus-visible {
   }
 
   .intro {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 15px;
-    padding: 28px 0 22px;
-  }
-
-  .intro h2 {
-    font-size: 25px;
-  }
-
-  .intro p:last-child {
-    font-size: 13px;
+    padding: 12px 0;
   }
 
   .workspace {
@@ -1011,8 +882,8 @@ summary:focus-visible {
   }
 
   .display {
-    min-height: 188px;
-    padding: 17px;
+    min-height: 162px;
+    padding: 16px;
   }
 
   .keypad {
@@ -1021,12 +892,6 @@ summary:focus-visible {
 
   .key {
     min-height: 57px;
-  }
-
-  .site-footer {
-    flex-direction: column;
-    gap: 5px;
-    padding: 22px 2px 27px;
   }
 }
 
