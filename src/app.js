@@ -144,8 +144,8 @@ function apiExpression(value) {
 
 async function request(path, options = {}) {
   const controller = new AbortController();
-  // Hosted HTTPS APIs can take about a minute to wake after an idle period.
-  const timeoutMs = apiBase.startsWith('https://') ? 90000 : 12000;
+  // Allow a little more network time for a remote HTTPS API than for local HTTP.
+  const timeoutMs = apiBase.startsWith('https://') ? 20000 : 12000;
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {

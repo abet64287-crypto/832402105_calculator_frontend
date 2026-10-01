@@ -20,7 +20,7 @@ python -m http.server 5173 --directory src
 
 ## 前后端连接与配置
 
-`src/config.js` 中的 `CALCULATOR_API_BASE_URL` 是本地开发默认 API 地址。GitHub Pages 发布时由 Actions 仓库变量生成线上配置，无需把 Render 域名写入源文件。用户也可在页面右上角的“API settings”修改地址，保存后立即重新查询历史。
+`src/config.js` 中的 `CALCULATOR_API_BASE_URL` 是本地开发默认 API 地址。GitHub Pages 发布时由 Actions 仓库变量生成线上配置，无需把腾讯云后端域名写入源文件。用户也可在页面右上角的“API settings”修改地址，保存后立即重新查询历史。
 
 接口地址和浅色／深色主题偏好会保存在浏览器 `localStorage`，仅用于记住界面设置。首次打开时，主题默认跟随操作系统。**计算结果和历史记录不存于浏览器**：结果来自 `POST /api/calculate` 响应，历史每次从 `GET /api/history` 获取，删除通过 `DELETE /api/history/{id}` 完成后重新查询。前端优先显示后端提供的精确 `result_text`，避免 JavaScript 数字舍入长小数或大整数。后端停止时，前端仍可输入，但无法取得新结果。
 
@@ -30,15 +30,15 @@ python -m http.server 5173 --directory src
 
 本仓库的 `.github/workflows/deploy-pages.yml` 在 `main` 分支更新或手动触发时，将 `src/` 复制为发布文件，并把线上 API 地址写入发布产物 `config.js`。原始 `src/config.js` 保持本地默认地址 `http://127.0.0.1:8000`。页面中的 CSS、JavaScript 均使用 `./` 相对路径，可在 GitHub Pages 的仓库子路径下加载。
 
-1. 先部署后端并取得公开 HTTPS **源地址**，例如 `https://your-service.onrender.com`。用浏览器访问该地址的 `/api/health`，确认服务可访问。地址中不要加 `/api`、其他路径或查询参数；建议不加末尾斜杠。
+1. 先在腾讯云服务器部署后端、配置 HTTPS，并取得公开 **源地址**，例如 `https://api.example.com`。用浏览器访问该地址的 `/api/health`，确认服务可访问。地址中不要加 `/api`、其他路径或查询参数；建议不加末尾斜杠。
 2. 打开前端 GitHub 仓库 `Settings → Secrets and variables → Actions → Variables → New repository variable`，新增名称 `CALCULATOR_API_BASE_URL`，值填上述后端源地址。这是公开 API 地址，不是数据库密码；不要把数据库连接串放进前端变量。
 3. 打开 `Settings → Pages → Build and deployment`，将 `Source` 设为 **GitHub Actions**。
 4. 推送包含 workflow 的提交到 `main`；也可以在 `Actions → Deploy frontend to GitHub Pages → Run workflow` 手动触发。若首次运行时还未设置第 2 步的变量，构建会明确报错；设置后重新手动运行即可。
 5. 在 Actions 页面确认部署成功，访问 `https://abet64287-crypto.github.io/832402105_calculator_frontend/`，计算一个表达式并核对历史记录。
 
-Render 后端的 `CALCULATOR_ALLOWED_ORIGINS` 应设为 **`https://abet64287-crypto.github.io`**。这是浏览器请求的 Origin，**不包含** `/832402105_calculator_frontend/` 仓库路径，也不要加末尾斜杠。前端网页完整地址则包含上述仓库路径。若浏览器以前保存过本地 API 地址，`localStorage` 会覆盖线上默认配置；在页面的 **API settings** 中改成 Render HTTPS 地址并保存。
+腾讯云后端的 `CALCULATOR_ALLOWED_ORIGINS` 应设为 **`https://abet64287-crypto.github.io`**。这是浏览器请求的 Origin，**不包含** `/832402105_calculator_frontend/` 仓库路径，也不要加末尾斜杠。前端网页完整地址则包含上述仓库路径。若浏览器以前保存过本地 API 地址，`localStorage` 会覆盖线上默认配置；在页面的 **API settings** 中改成腾讯云后端 HTTPS 地址并保存。
 
-Render 的免费 Web Service 闲置后可能需要约一分钟唤醒。前端对 HTTPS API 请求最多等待 90 秒，页面会在此期间显示连接中；本地 HTTP 请求仍使用 12 秒超时。
+前端对远程 HTTPS API 请求最多等待 20 秒；本地 HTTP 请求使用 12 秒超时。腾讯云后端应保持运行，以便在验收期间持续响应。
 
 ## 功能与操作
 
