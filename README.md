@@ -29,10 +29,10 @@ For different frontend and backend origins, configure `CALCULATOR_ALLOWED_ORIGIN
 
 ## GitHub Pages deployment
 
-The workflow at `.github/workflows/deploy-pages.yml` copies `src/` into the Pages artifact when `main` changes or the workflow is run manually. Asset paths are relative, so they work under the repository path. The backend deployment guide uses a Tencent Cloud server, HTTPS through Caddy, and SQLite on persistent server storage.
+The workflow at `.github/workflows/deploy-pages.yml` copies `src/` into the Pages artifact when `main` changes or the workflow is run manually. Asset paths are relative, so they work under the repository path. I plan to use `api.calculator-demo.site` for the backend on a Tencent Cloud server, with HTTPS through Caddy and SQLite on persistent server storage. The public backend and Pages site have not been verified yet.
 
-1. Deploy the backend and check its HTTPS health endpoint, for example `https://api.example.com/api/health`.
-2. In the frontend GitHub repository, open `Settings → Secrets and variables → Actions → Variables → New repository variable`. Set `CALCULATOR_API_BASE_URL` to the backend origin, for example `https://api.example.com`. Do not include `/api`, another path, credentials, a query string, or a database URL. The build fails if this variable is missing.
+1. Deploy the backend and check its HTTPS health endpoint at `https://api.calculator-demo.site/api/health`.
+2. In the frontend GitHub repository, open `Settings → Secrets and variables → Actions → Variables → New repository variable`. Set `CALCULATOR_API_BASE_URL` to `https://api.calculator-demo.site`. Do not include `/api`, another path, credentials, a query string, or a database URL. The build fails if this variable is missing.
 3. In `Settings → Pages → Build and deployment`, choose **GitHub Actions** as the source.
 4. Push `main` or use `Actions → Deploy frontend to GitHub Pages → Run workflow`. Rerun it if the first build happened before setting the variable.
 5. After the workflow succeeds, open the expected Pages URL: <https://abet64287-crypto.github.io/832402105_calculator_frontend/>. Test a calculation, history refresh, and deletion. The public site still needs to be verified after deployment.
