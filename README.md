@@ -29,15 +29,11 @@ For different frontend and backend origins, configure `CALCULATOR_ALLOWED_ORIGIN
 
 ## GitHub Pages deployment
 
-The workflow at `.github/workflows/deploy-pages.yml` copies `src/` into the Pages artifact when `main` changes or the workflow is run manually. Asset paths are relative, so they work under the repository path. I plan to use `api.calculator-demo.site` for the backend on a Tencent Cloud server, with HTTPS through Caddy and SQLite on persistent server storage. The public backend and Pages site have not been verified yet.
+The workflow at `.github/workflows/deploy-pages.yml` copies `src/` into the Pages artifact when `main` changes or the workflow is run manually. Asset paths are relative, so they work under the repository path. On October 3, workflow run `37109962209` succeeded, <https://abet64287-crypto.github.io/832402105_calculator_frontend/> returned HTTP 200, and its published `config.js` pointed to `https://api.calculator-demo.site`. The Tencent Cloud API is available over HTTPS with normal TLS validation. In the public Pages browser, **Backend connected** appeared, `sin(pi/2)=1` entered history, and deleting that entry worked. Pages and API health were rechecked after a full server reboot.
 
-1. Deploy the backend and check its HTTPS health endpoint at `https://api.calculator-demo.site/api/health`.
-2. In the frontend GitHub repository, open `Settings → Secrets and variables → Actions → Variables → New repository variable`. Set `CALCULATOR_API_BASE_URL` to `https://api.calculator-demo.site`. Do not include `/api`, another path, credentials, a query string, or a database URL. The build fails if this variable is missing.
-3. In `Settings → Pages → Build and deployment`, choose **GitHub Actions** as the source.
-4. Push `main` or use `Actions → Deploy frontend to GitHub Pages → Run workflow`. Rerun it if the first build happened before setting the variable.
-5. After the workflow succeeds, open the expected Pages URL: <https://abet64287-crypto.github.io/832402105_calculator_frontend/>. Test a calculation, history refresh, and deletion. The public site still needs to be verified after deployment.
+The deployment used the repository variable `CALCULATOR_API_BASE_URL=https://api.calculator-demo.site` and **GitHub Actions** as the Pages source. To redeploy, push `main` or use `Actions → Deploy frontend to GitHub Pages → Run workflow`. The variable must be an HTTPS origin without `/api`, another path, credentials, a query string, or a database URL; the build fails if it is missing. The API health URL is <https://api.calculator-demo.site/api/health>. I have checked a public browser calculation, history, and deletion; I still need to repeat more expression and theme cases on the deployed page.
 
-Set the backend's `CALCULATOR_ALLOWED_ORIGINS` to `https://abet64287-crypto.github.io` for this Pages site. The origin does not contain the `/832402105_calculator_frontend/` path. If the page still uses an old API URL, update **API settings**; its saved browser value overrides the workflow default.
+The backend allows `https://abet64287-crypto.github.io` for this Pages site; a public CORS preflight returned HTTP 204 with that allowed origin. The origin does not contain the `/832402105_calculator_frontend/` path. If the page still uses an old API URL, update **API settings**; its saved browser value overrides the workflow default.
 
 Remote HTTPS requests time out after 20 seconds and local HTTP requests after 12 seconds. Keep the backend available during the evaluation period.
 
@@ -57,6 +53,7 @@ Remote HTTPS requests time out after 20 seconds and local HTTP requests after 12
 - `src/config.js`: local API default.
 - `src/app.js`: input, requests, results, history, settings, and theme.
 - `scripts/build-pages.mjs`: Pages artifact and published API setting.
+- `src/blog-screenshots/`: images used by the English assignment blog and served by Pages.
 - `codestyle.md`: code conventions and sources.
 
 ## Quick checks
